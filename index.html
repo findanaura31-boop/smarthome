@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Home Care | Monitoring & Control</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo"><div class="logo-icon"><i class="fa-solid fa-house"></i></div><div><h2>Smart Home</h2><span>CARE</span></div></div>
+  <nav>
+    <a href="#dashboard" class="active"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
+    <a href="#control"><i class="fa-solid fa-gamepad"></i>Kontrol Alat</a>
+    <a href="#alat"><i class="fa-solid fa-cube"></i>Desain Alat</a>
+    <a href="#simulasi"><i class="fa-solid fa-robot"></i>Simulasi Robot</a>
+    <a href="#monitoring"><i class="fa-solid fa-chart-simple"></i>Monitoring</a>
+    <a href="#activity"><i class="fa-solid fa-clock-rotate-left"></i>Aktivitas</a>
+  </nav>
+  <div class="sidebar-bottom"><div class="connection"><span class="online-dot"></span><div><strong id="connTitle">Perangkat Online</strong><small id="connSub">ESP32 Terhubung</small></div></div></div>
+</aside>
+
+<main class="main">
+<header class="header">
+  <div><p class="small-title">SMART HOME CARE</p><h1>Monitoring & Kontrol</h1><p class="subtitle">Pantau dan kendalikan alat pembersih rumah Anda.</p></div>
+  <div class="header-right"><div class="connection-status" id="connBadge"><span></span>Online</div><div class="user"><div class="user-avatar"><i class="fa-solid fa-user"></i></div><div><strong>Admin</strong><small>Smart Home</small></div></div></div>
+</header>
+
+<section id="dashboard">
+  <div class="section-title"><div><h2>Status Perangkat</h2><p>Informasi kondisi alat pembersih saat ini.</p></div><div class="last-update"><i class="fa-regular fa-clock"></i> Update: <span id="lastUpdate">--:--:--</span></div></div>
+  <div class="cards">
+    <div class="card"><div class="card-icon green"><i class="fa-solid fa-broom"></i></div><div class="card-info"><span>Status Alat</span><strong id="deviceStatus">MATI</strong><small id="deviceDescription">Alat sedang tidak digunakan</small></div></div>
+    <div class="card"><div class="card-icon yellow"><i class="fa-solid fa-battery-three-quarters"></i></div><div class="card-info"><span>Baterai</span><strong><span id="battery">85</span>%</strong><div class="progress"><div id="batteryProgress" class="progress-bar"></div></div></div></div>
+    <div class="card"><div class="card-icon red"><i class="fa-solid fa-temperature-half"></i></div><div class="card-info"><span>Suhu Mesin</span><strong><span id="temperature">32</span>°C</strong><small>Normal</small></div></div>
+    <div class="card"><div class="card-icon blue"><i class="fa-solid fa-droplet"></i></div><div class="card-info"><span>Kapasitas Air</span><strong><span id="water">72</span>%</strong><div class="progress"><div id="waterProgress" class="progress-bar blue-progress"></div></div></div></div>
+  </div>
+</section>
+
+<section id="control">
+  <div class="section-title"><div><h2>Kontrol Alat</h2><p>Kendalikan alat pembersih secara langsung.</p></div></div>
+  <div class="control-grid">
+    <div class="control-panel"><div class="panel-header"><div><h3>Power</h3><p>Nyalakan atau matikan alat</p></div><i class="fa-solid fa-power-off"></i></div><button id="powerButton" class="power-button" onclick="togglePower()"><i class="fa-solid fa-power-off"></i><span id="powerText">NYALAKAN ALAT</span></button><div class="power-status">Status: <strong id="powerStatus">OFF</strong></div></div>
+    <div class="control-panel"><div class="panel-header"><div><h3>Mode Pembersihan</h3><p>Pilih mode kerja alat</p></div><i class="fa-solid fa-sliders"></i></div><div class="mode-buttons"><button class="mode-btn active" onclick="changeMode('AUTO',this)"><i class="fa-solid fa-robot"></i> Otomatis</button><button class="mode-btn" onclick="changeMode('MANUAL',this)"><i class="fa-solid fa-hand"></i> Manual</button></div><div class="current-mode">Mode saat ini: <strong id="currentMode">OTOMATIS</strong></div></div>
+    <div class="control-panel"><div class="panel-header"><div><h3>Kecepatan</h3><p>Atur kecepatan motor</p></div><i class="fa-solid fa-gauge-high"></i></div><div class="speed-value"><span id="speedValue">50</span>%</div><input type="range" min="0" max="100" value="50" oninput="changeSpeed(this.value)"><div class="range-label"><span>Pelan</span><span>Cepat</span></div></div>
+    <div class="control-panel"><div class="panel-header"><div><h3>Daya Hisap</h3><p>Atur kekuatan penyedot</p></div><i class="fa-solid fa-wind"></i></div><div class="suction-buttons"><button onclick="setSuction('Rendah',this)">Rendah</button><button class="active" onclick="setSuction('Sedang',this)">Sedang</button><button onclick="setSuction('Tinggi',this)">Tinggi</button></div><div class="current-mode">Daya hisap: <strong id="suctionValue">SEDANG</strong></div></div>
+  </div>
+</section>
+
+<section id="alat">
+  <div class="section-title"><div><h2>Desain Alat</h2><p>Komponen utama robot pembersih.</p></div></div>
+  <div class="control-panel"><img class="device-img" src="assets/smart-home-care-robot.svg" alt="Ilustrasi robot Smart Home Care"></div>
+</section>
+
+<section id="simulasi">
+  <div class="section-title"><div><h2>Simulasi Robot</h2><p>Robot mengikuti tombol Power, Mode, Kecepatan, dan Daya Hisap di bagian Kontrol Alat.</p></div></div>
+  <div class="sim-grid">
+    <div class="control-panel"><canvas id="robotCanvas" width="640" height="420"></canvas></div>
+    <div class="sim-side">
+      <div class="control-panel"><div class="panel-header"><div><h3>Sumber Data</h3><p>Simulasi atau ESP32 asli</p></div><i class="fa-solid fa-wifi"></i></div>
+        <div class="mode-buttons"><button class="mode-btn active" id="srcSim">Simulasi</button><button class="mode-btn" id="srcLive">ESP32 Asli</button></div>
+        <div class="live-row" id="liveRow" hidden><input id="espIp" placeholder="IP ESP32, mis. 192.168.1.50"><button class="go-btn" id="espGo">Sambungkan</button></div>
+        <div class="current-mode" id="srcNote"></div></div>
+      <div class="control-panel"><div class="panel-header"><div><h3>Kendali Manual</h3><p>Aktif saat Power ON &amp; Mode Manual</p></div><i class="fa-solid fa-gamepad"></i></div>
+        <div class="dpad"><button data-k="up">▲</button><button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button></div>
+        <div class="current-mode">Atau gunakan panah/WASD, atau tahan &amp; geser pada peta.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="monitoring">
+  <div class="section-title"><div><h2>Monitoring Sensor</h2><p>Data sensor alat secara real-time.</p></div></div>
+  <div class="sensor-grid">
+    <div class="sensor-card"><div class="sensor-top"><span>Suhu</span><i class="fa-solid fa-temperature-half"></i></div><strong><span id="sensorTemperature">32</span>°C</strong><small>Sensor suhu mesin</small></div>
+    <div class="sensor-card"><div class="sensor-top"><span>Air</span><i class="fa-solid fa-water"></i></div><strong><span id="sensorWater">72</span>%</strong><small>Kapasitas tangki air</small></div>
+    <div class="sensor-card"><div class="sensor-top"><span>Debu</span><i class="fa-solid fa-cloud"></i></div><strong><span id="dust">25</span>%</strong><small>Kapasitas tempat debu</small></div>
+    <div class="sensor-card"><div class="sensor-top"><span>Baterai</span><i class="fa-solid fa-battery-half"></i></div><strong><span id="sensorBattery">85</span>%</strong><small>Kondisi baterai</small></div>
+    <div class="sensor-card"><div class="sensor-top"><span>Jarak Rintangan</span><i class="fa-solid fa-ruler-horizontal"></i></div><strong><span id="sensorDist">--</span> cm</strong><small>Sensor ultrasonik</small></div>
+    <div class="sensor-card"><div class="sensor-top"><span>Area Bersih</span><i class="fa-solid fa-broom"></i></div><strong><span id="sensorCov">0</span>%</strong><small>Cakupan pembersihan</small></div>
+  </div>
+</section>
+
+<section id="activity">
+  <div class="section-title"><div><h2>Aktivitas Terakhir</h2><p>Riwayat kontrol alat.</p></div><button class="clear-btn" onclick="clearActivity()">Hapus Riwayat</button></div>
+  <div class="activity-panel"><div id="activityList"><div class="activity-item"><div class="activity-icon"><i class="fa-solid fa-power-off"></i></div><div><strong>Sistem siap digunakan</strong><small>Perangkat berhasil terhubung</small></div><span id="initialTime">--:--</span></div></div></div>
+</section>
+
+<footer><p>© 2026 <strong>Smart Home Care</strong>. Monitoring & Control System.</p><p><span class="online-dot"></span> Sistem berjalan normal</p></footer>
+</main>
+<div id="toast" class="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMessage">Berhasil</span></div>
+<script src="script.js"></script>
+<script src="robot.js"></script>
+</body>
+</html>
